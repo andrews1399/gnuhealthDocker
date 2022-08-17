@@ -1,0 +1,40 @@
+version: '3.7'
+services:
+  db:
+    build: postgres-gnuhealh
+    #image: bh0na/gnuhealth-postgres
+    container_name: gnuhealth-postgres
+    ports: 
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=gnuhealth
+      - POSTGRES_PASSWORD=12345678
+      - POSTGRES_DB=gnuhealth
+    networks: 
+      - gnuhealth
+    restart: always 
+
+  tryton:
+    #image: prueba5
+    build: gnu-server
+    # image: mbsolutions/tryton-server-gnuhealth:3.8
+    #volumes:
+    #  - ./tryton-data:/var/lib/tryton
+#    container_name: gnuhealth
+    environment:
+      - DB_USER=gnuhealth
+      - DB_PASSWORD=12345678
+      - DB_HOSTNAME=db
+      - DB_PORT=5432
+    networks: 
+      - gnuhealth
+    ports:
+      - "8000:8000"
+#    links:
+#      - db
+    depends_on:
+       - db
+    restart: always
+
+networks: 
+  gnuhealth:
